@@ -82,9 +82,9 @@ if __name__ == '__main__':
     tcp_server.bind(("", 40001))
 
     # 3 设置监听
-    tcp_server.listen(128)
+    tcp_server.listen(32)
 
-    # 4 循环等待客户端连接请求（也就是最多可以同时有128个用户连接到服务器进行通信）
+    # 4 循环等待客户端连接请求（也就是最多可以同时有32个用户连接到服务器进行通信）
     print("等待连接.....")
     while True:
         tcp_client_1, tcp_client_address = tcp_server.accept()
