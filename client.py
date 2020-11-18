@@ -15,10 +15,10 @@ tcpCliSock = socket(AF_INET, SOCK_STREAM)
 tcpCliSock.connect(ADDR)  # 建立TCP连接
 
 while True:
-    data = input("输入你要发送的消：")
-    if not data:  # 当空数据的时候，连接就停止了。
-        break
-    tcpCliSock.send(data.encode('utf-8'))  # 发送数据
+    # data = input("输入你要发送的消：")
+    # if not data:  # 当空数据的时候，连接就停止了。
+    #     break
+    # tcpCliSock.send(data.encode('utf-8'))  # 发送数据
     data = tcpCliSock.recv(BUFSIZ)  # 接受对方回复消息
     if not data:
         break

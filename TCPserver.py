@@ -51,19 +51,26 @@ import socket
 import threading
 import time
 
-
 def dispose_client_request(tcp_client_1, tcp_client_address):
     while True:
         recv_data = tcp_client_1.recv(4096)
         if recv_data:
-            send_data = f"[{time.time()}]{recv_data}".encode()
-            # 广播消息
-            for client in clients:
-                client.send(send_data)
+            global send_data
+            send_data += recv_data
         else:
             clients.remove(tcp_client_1)
             tcp_client_1.close()
             break
+
+
+def broadcast():
+    global send_data
+    # 广播消息
+    for client in clients:
+        client.send(f"[{time.time()}]{send_data}".encode())
+    # 广播之后，将数据清空
+    send_data = b""
+
 
 if __name__ == '__main__':
 
@@ -73,6 +80,17 @@ if __name__ == '__main__':
     tcp_server.listen(32)
 
     clients = []
+    send_data = b""
+
+    def fun_timer():
+        broadcast()
+        global sync_timer
+        # 重复构造定时器
+        sync_timer = threading.Timer(10, fun_timer)
+        sync_timer.start()
+
+    sync_timer = threading.Timer(10, fun_timer)
+    sync_timer.start()
 
     while True:
         tcp_client_1, tcp_client_address = tcp_server.accept()
