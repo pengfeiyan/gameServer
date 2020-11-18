@@ -86,7 +86,7 @@ if __name__ == '__main__':
     clients = []
     send_data = b""
 
-    sync_timer = threading.Timer(10, broadcast)
+    sync_timer = threading.Thread(target=broadcast)
     sync_timer.start()
 
     while True:
