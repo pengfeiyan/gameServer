@@ -64,12 +64,15 @@ def dispose_client_request(tcp_client_1, tcp_client_address):
 
 
 def broadcast():
-    global send_data
-    # 广播消息
-    for client in clients:
-        client.send(f"[{time.time()}]{send_data}".encode())
-    # 广播之后，将数据清空
-    send_data = b""
+
+    while True:
+        time.sleep(10)
+        global send_data
+        # 广播消息
+        for client in clients:
+            client.send(f"[{time.time()}]{send_data}".encode())
+        # 广播之后，将数据清空
+        send_data = b""
 
 
 if __name__ == '__main__':
@@ -82,14 +85,7 @@ if __name__ == '__main__':
     clients = []
     send_data = b""
 
-    def fun_timer():
-        broadcast()
-        global sync_timer
-        # 重复构造定时器
-        sync_timer = threading.Timer(10, fun_timer)
-        sync_timer.start()
-
-    sync_timer = threading.Timer(10, fun_timer)
+    sync_timer = threading.Timer(10, broadcast)
     sync_timer.start()
 
     while True:
