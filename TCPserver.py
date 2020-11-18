@@ -69,8 +69,9 @@ def broadcast():
         time.sleep(10)
         global send_data
         # 广播消息
+        data = f"[{time.time()}]{send_data}".encode()
         for client in clients:
-            client.send(f"[{time.time()}]{send_data}".encode())
+            client.send(data)
         # 广播之后，将数据清空
         send_data = b""
 
