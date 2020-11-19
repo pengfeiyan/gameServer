@@ -49,39 +49,48 @@
 import socket
 # 导入线程模块
 import threading
-import time
+import time, datetime
 
 def dispose_client_request(tcp_client_1, tcp_client_address):
     while True:
-        recv_data = tcp_client_1.recv(4096)
-        if recv_data:
-            global send_data
-            send_data += recv_data
-        else:
-            clients.remove(tcp_client_1)
-            tcp_client_1.close()
-            break
+        try:
+            recv_data = tcp_client_1.recv(4096)
+            if recv_data:
+                global send_data
+                send_data += recv_data
+            else:
+                clients.remove(tcp_client_1)
+                tcp_client_1.close()
+                break
+        except Exception as e:
+            print(f"[{datetime.datetime.now()}]{tcp_client_address}，{e}")
 
 
 def broadcast():
-
     while True:
         time.sleep(10)
         global send_data
         # 广播消息
         data = f"[{time.time()}]{send_data}".encode()
-        for client in clients:
-            client.send(data)
+        try:
+            for client in clients:
+                client.send(data)
+        except Exception as e:
+            print(f"[{datetime.datetime.now()}]广播失败，{e}")
         # 广播之后，将数据清空
         send_data = b""
 
 
 if __name__ == '__main__':
 
-    tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
-    tcp_server.bind(("", 40001))
-    tcp_server.listen(32)
+    try:
+        tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+        tcp_server.bind(("", 40001))
+        tcp_server.listen(32)
+    except Exception as e:
+        print(f"[{datetime.datetime.now()}]tcp server start error")
+        exit(0)
 
     clients = []
     send_data = b""
