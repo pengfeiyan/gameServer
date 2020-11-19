@@ -68,7 +68,7 @@ def dispose_client_request(tcp_client_1, tcp_client_address):
 
 def broadcast():
     while True:
-        time.sleep(10)
+        time.sleep(1)
         global send_data
         # 广播消息
         data = f"[{time.time()}]{send_data}".encode()
@@ -89,7 +89,7 @@ if __name__ == '__main__':
         tcp_server.bind(("", 40001))
         tcp_server.listen(32)
     except Exception as e:
-        print(f"[{datetime.datetime.now()}]tcp server start error")
+        print(f"[{datetime.datetime.now()}]tcp server start error, {e}")
         exit(0)
 
     clients = []
