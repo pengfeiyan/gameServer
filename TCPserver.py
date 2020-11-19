@@ -71,7 +71,7 @@ def broadcast():
         time.sleep(1)
         global send_data
         # 广播消息
-        data = f"[{time.time()}]{send_data}".encode()
+        data = f"[{int(time.time()*10000)}]{send_data}".encode()
         try:
             for client in clients:
                 client.send(data)
